@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 
 const PersonForm = ({ newName, setNewName, newNumber, setNewNumber, setPersons, persons }) => {
     const handleNameChange = (event) => {
