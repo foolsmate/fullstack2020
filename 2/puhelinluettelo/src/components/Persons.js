@@ -2,15 +2,22 @@ import React from 'react'
 import Person from './Person'
 import pService from '../services/persons'
 
-const Persons = ({ persons, newFilter, setPersons }) => {
+
+const Persons = ({ persons, newFilter, setPersons, setNotification, setErr }) => {
 
     const delPerson = person => {
         if (window.confirm(`Delete '${person.name}' ?`)) {
             pService.del(person.id)
-            .catch(error => { 
-                alert(`the person '${person.name}' was already deleted from server`) 
-                setPersons(persons.filter(n => n.id !== person.id)) })
-            setPersons(persons.filter(n => n.id !== person.id))             
+                .catch(error => {
+                    setPersons(persons.filter(n => n.id !== person.id))
+                    setErr(true)
+                    setNotification(`Information of ${person.name} was already deleted from server`)        
+                    setTimeout(() => { setNotification(null) }, 5000)
+                })
+            setErr(false)
+            setPersons(persons.filter(n => n.id !== person.id))
+            setNotification(`Removed '${person.name}'`)
+            setTimeout(() => { setNotification(null) }, 5000)
         }
     }
 

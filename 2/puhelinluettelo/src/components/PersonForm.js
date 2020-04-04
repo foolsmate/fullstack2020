@@ -1,7 +1,7 @@
 import React from 'react'
 import pService from '../services/persons'
 
-const PersonForm = ({ newName, setNewName, newNumber, setNewNumber, setPersons, persons }) => {
+const PersonForm = ({ newName, setNewName, newNumber, setNewNumber, setPersons, persons, setNotification, setErr }) => {
     const handleNameChange = (event) => {
         setNewName(event.target.value)
     }
@@ -24,6 +24,9 @@ const PersonForm = ({ newName, setNewName, newNumber, setNewNumber, setPersons, 
                 pService.update(old.id, { ...old, phone: newNumber })
                     .then(response =>
                         setPersons(persons.map(person => person.id !== old.id ? person : { ...old, phone: newNumber })))
+                setErr(false)
+                setNotification(`Changed number for '${old.name}'`)
+                setTimeout(() => { setNotification(null) }, 5000)
             }
 
         } else {
@@ -33,6 +36,9 @@ const PersonForm = ({ newName, setNewName, newNumber, setNewNumber, setPersons, 
                     setPersons(persons.concat(returnedName))
                     setNewName('')
                     setNewNumber('')
+                    setErr(false)
+                    setNotification(`Added '${newName}'`)
+                    setTimeout(() => { setNotification(null) }, 5000)
                 })
         }
     }
