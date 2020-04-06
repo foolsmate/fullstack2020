@@ -1,15 +1,7 @@
-import React, { useEffect } from 'react'
-import axios from 'axios'
+import React from 'react'
 
-const Countries = ({ countries, setCountries, newFilter, setFilter }) => {
 
-    useEffect(() => {
-        axios
-            .get('https://restcountries.eu/rest/v2/all')
-            .then(response => {
-                setCountries(countries.concat(response.data))
-            })
-    }, [])
+const Countries = ({ countries, newFilter, setFilter }) => {
 
     const filteredList = countries.filter(country => country.name.toLowerCase().includes(newFilter.toLowerCase()))
 
@@ -23,7 +15,7 @@ const Countries = ({ countries, setCountries, newFilter, setFilter }) => {
                 <div>population: {filteredList[0].population}</div>
                 <h2>languages</h2>
                 <ul>{filteredList[0].languages.map(language => <li>{language.name}</li>)}</ul>
-                <img src={filteredList[0].flag} width="200" height="100" />
+                <img src={filteredList[0].flag} alt='flag' width="200" height="100" />
             </div>
         )
     } else {
