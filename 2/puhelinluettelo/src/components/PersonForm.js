@@ -40,6 +40,11 @@ const PersonForm = ({ newName, setNewName, newNumber, setNewNumber, setPersons, 
                     setNotification(`Added '${newName}'`)
                     setTimeout(() => { setNotification(null) }, 5000)
                 })
+                .catch(error => {
+                    setErr(true)
+                    setNotification(`Person validation failed: ${error.response.data.error}`)        
+                    setTimeout(() => { setNotification(null) }, 5000)
+                })
         }
     }
 
