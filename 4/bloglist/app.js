@@ -3,14 +3,26 @@ const app = express()
 const cors = require('cors')
 const mongoose = require('mongoose')
 const blogsRouter = require('./controllers/blogs')
-  
-  const mongoUrl = 'mongodb+srv://fullstack:poopoo123@cluster0-icpr3.mongodb.net/bloglist?retryWrites=true&w=majority'
-  
-  mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true})
-  
-  app.use(cors())
-  app.use(express.json())
+const config = require('./utils/config.js')
+const logger = require('./utils/logger.js')
+const middleware = require('./utils/middleware.js')
 
-  app.use('/api/blogs', blogsRouter)  
+mongoose.connect(config.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => {
+    logger.info('connected to MongoDB')
+  })
+  .catch((error) => {
+    logger.error('error connection to MongoDB:', error.message)
+  })
 
-  module.exports = app
+app.use(cors())
+app.use(express.json())
+
+app.use(middleware.requestLogger)
+
+app.use('/api/blogs', blogsRouter)
+
+app.use(middleware.unknownEndpoint)
+app.use(middleware.errorHandler)
+
+module.exports = app
