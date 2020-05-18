@@ -9,6 +9,8 @@ const logger = require('./utils/logger.js')
 const middleware = require('./utils/middleware.js')
 const loginRouter = require('./controllers/login')
 const usersRouter = require('./controllers/users')
+const cors = require('cors')
+
 require('express-async-errors')
 
 mongoose.connect(config.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
@@ -30,5 +32,6 @@ app.use('/api/users', usersRouter)
 
 app.use(middleware.unknownEndpoint)
 app.use(middleware.errorHandler)
+app.use(cors())
 
 module.exports = app
